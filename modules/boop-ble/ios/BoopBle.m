@@ -1,7 +1,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventEmitter.h>
 
-@interface RCT_EXTERN_MODULE(BleBoop, RCTEventEmitter)
+@interface RCT_EXTERN_MODULE(BoopBle, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(startAdvertising:(NSString *)userName
                   resolver:(RCTPromiseResolveBlock)resolve

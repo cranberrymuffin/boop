@@ -4,7 +4,7 @@ import NativeBoopBle, { type BoopUser } from "./NativeBoopBle";
 
 export { BoopUser };
 
-export interface BleBoopEvents {
+export interface BoopBleEvents {
   onUserDiscovered: (user: BoopUser) => void;
   onUserLost: (userId: string) => void;
   onConnectionStateChanged: (
@@ -13,7 +13,7 @@ export interface BleBoopEvents {
   onError: (error: string) => void;
 }
 
-class BleBoop {
+class BoopBle {
   private eventEmitter: NativeEventEmitter;
 
   constructor() {
@@ -86,9 +86,9 @@ class BleBoop {
   /**
    * Add event listener
    */
-  addListener<K extends keyof BleBoopEvents>(
+  addListener<K extends keyof BoopBleEvents>(
     eventName: K,
-    listener: BleBoopEvents[K]
+    listener: BoopBleEvents[K]
   ): EmitterSubscription {
     return this.eventEmitter.addListener(eventName, listener);
   }
@@ -96,9 +96,9 @@ class BleBoop {
   /**
    * Remove all listeners for an event
    */
-  removeAllListeners(eventName: keyof BleBoopEvents): void {
+  removeAllListeners(eventName: keyof BoopBleEvents): void {
     this.eventEmitter.removeAllListeners(eventName);
   }
 }
 
-export default new BleBoop();
+export default new BoopBle();

@@ -14,12 +14,15 @@ Pod::Spec.new do |s|
   s.source       = { :git => ".git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift,cpp}"
-  s.private_header_files = "ios/**/*.h"
+  s.public_header_files = "ios/BoopBle.h"
   
   # Swift support
   s.swift_version = "5.0"
+  
+  # Enable Swift/ObjC interop
   s.pod_target_xcconfig = {
-    'SWIFT_OBJC_BRIDGING_HEADER' => '$(PODS_TARGET_SRCROOT)/ios/BoopBle-Bridging-Header.h'
+    'DEFINES_MODULE' => 'YES',
+    'SWIFT_OBJC_INTERFACE_HEADER_NAME' => 'BoopBle-Swift.h'
   }
 
 

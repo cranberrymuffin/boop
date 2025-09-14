@@ -4,7 +4,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "react-native-ble-boop": ["modules/react-native-ble-boop/src"],
+      "boop-ble": ["modules/boop-ble/src"],
       "@/*": ["./*"]
     }
   },

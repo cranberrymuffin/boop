@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import type { BoopUser } from "../modules/react-native-ble-boop/src";
-import BleBoop from "../modules/react-native-ble-boop/src";
+import type { BoopUser } from "../modules/boop-ble/src";
+import BoopBle from "../modules/boop-ble/src";
 
-export default function BleBoopScreen() {
+export default function BoopBleScreen() {
   const [isScanning, setIsScanning] = useState(false);
   const [isAdvertising, setIsAdvertising] = useState(false);
   const [discoveredUsers, setDiscoveredUsers] = useState<BoopUser[]>([]);
@@ -25,7 +25,7 @@ export default function BleBoopScreen() {
     checkBluetoothStatus();
 
     // Set up event listeners
-    const userDiscoveredListener = BleBoop.addListener(
+    const userDiscoveredListener = BoopBle.addListener(
       "onUserDiscovered",
       (user: BoopUser) => {
         setDiscoveredUsers((prev) => {
@@ -37,21 +37,21 @@ export default function BleBoopScreen() {
       }
     );
 
-    const userLostListener = BleBoop.addListener(
+    const userLostListener = BoopBle.addListener(
       "onUserLost",
       (userId: string) => {
         setDiscoveredUsers((prev) => prev.filter((u) => u.id !== userId));
       }
     );
 
-    const connectionListener = BleBoop.addListener(
+    const connectionListener = BoopBle.addListener(
       "onConnectionStateChanged",
       (state: string) => {
         setConnectionState(state);
       }
     );
 
-    const errorListener = BleBoop.addListener("onError", (error: string) => {
+    const errorListener = BoopBle.addListener("onError", (error: string) => {
       Alert.alert("BLE Error", error);
     });
 
@@ -65,7 +65,7 @@ export default function BleBoopScreen() {
 
   const checkBluetoothStatus = async () => {
     try {
-      const enabled = await BleBoop.isBluetoothEnabled();
+      const enabled = await BoopBle.isBluetoothEnabled();
       setBluetoothEnabled(enabled);
 
       if (!enabled) {
@@ -82,7 +82,7 @@ export default function BleBoopScreen() {
 
   const requestPermissions = async () => {
     try {
-      const granted = await BleBoop.requestBluetoothPermissions();
+      const granted = await BoopBle.requestBluetoothPermissions();
       if (!granted) {
         Alert.alert(
           "Permissions Required",
@@ -105,11 +105,11 @@ export default function BleBoopScreen() {
       await requestPermissions();
 
       if (isScanning) {
-        await BleBoop.stopScanning();
+        await BoopBle.stopScanning();
         setIsScanning(false);
         setDiscoveredUsers([]);
       } else {
-        await BleBoop.startScanning();
+        await BoopBle.startScanning();
         setIsScanning(true);
       }
     } catch (error) {
@@ -129,10 +129,10 @@ export default function BleBoopScreen() {
       await requestPermissions();
 
       if (isAdvertising) {
-        await BleBoop.stopAdvertising();
+        await BoopBle.stopAdvertising();
         setIsAdvertising(false);
       } else {
-        await BleBoop.startAdvertising(userName);
+        await BoopBle.startAdvertising(userName);
         setIsAdvertising(true);
       }
     } catch (error) {
@@ -144,7 +144,7 @@ export default function BleBoopScreen() {
 
   const connectToUser = async (user: BoopUser) => {
     try {
-      await BleBoop.connectToUser(user.id);
+      await BoopBle.connectToUser(user.id);
       Alert.alert("Connecting", `Connecting to ${user.name}...`);
     } catch (error) {
       const errorMessage =

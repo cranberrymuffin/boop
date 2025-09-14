@@ -1,13 +1,13 @@
 module.exports = {
   dependencies: {
-    "react-native-ble-boop": {
+    "boop-ble": {
       platforms: {
         android: {
-          sourceDir: "../modules/react-native-ble-boop/android/",
-          packageImportPath: "import com.boopble.BleBoopPackage;",
+          sourceDir: "../modules/boop-ble/android/",
+          packageImportPath: "import com.boopble.BoopBlePackage;",
         },
         ios: {
-          podspecPath: "../modules/react-native-ble-boop/ios/BleBoop.podspec",
+          podspecPath: "../modules/boop-ble/ios/BoopBle.podspec",
         },
       },
     },

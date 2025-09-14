@@ -1,5 +1,5 @@
-import BleBoopScreen from "../components/BleBoopScreen";
+import BoopBleScreen from "../components/BoopBleScreen";
 
 export default function Index() {
-  return <BleBoopScreen />;
+  return <BoopBleScreen />;
 }

@@ -14,7 +14,8 @@
         "NSBluetoothAlwaysUsageDescription": "This app uses Bluetooth to discover and connect with nearby Boop users.",
         "NSBluetoothPeripheralUsageDescription": "This app uses Bluetooth to advertise itself to nearby Boop users."
       },
-      "bundleIdentifier": "com.anonymous.boop"
+      "bundleIdentifier": "com.anonymous.boop",
+      "appleTeamId": "Z9WN384MPT"
     },
     "android": {
       "adaptiveIcon": {

@@ -19,7 +19,7 @@ import androidx.core.app.ActivityCompat
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class BleBoopModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+class BoopBleModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
     
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothLeScanner: BluetoothLeScanner? = null
@@ -45,7 +45,7 @@ class BleBoopModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
     )
 
     override fun getName(): String {
-        return "BleBoop"
+        return "BoopBle"
     }
 
     init {
@@ -91,13 +91,13 @@ class BleBoopModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
                 override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
                     isAdvertising = true
                     promise.resolve(null)
-                    Log.d("BleBoop", "Advertising started successfully")
+                    Log.d("BoopBle", "Advertising started successfully")
                 }
 
                 override fun onStartFailure(errorCode: Int) {
                     isAdvertising = false
                     promise.reject("ADVERTISE_FAILED", "Failed to start advertising: $errorCode")
-                    Log.e("BleBoop", "Advertising failed: $errorCode")
+                    Log.e("BoopBle", "Advertising failed: $errorCode")
                 }
             }
 
@@ -173,7 +173,7 @@ class BleBoopModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
                     sendEvent("onError", Arguments.createMap().apply {
                         putString("error", "Scan failed: $errorCode")
                     })
-                    Log.e("BleBoop", "Scan failed: $errorCode")
+                    Log.e("BoopBle", "Scan failed: $errorCode")
                 }
             }
 
