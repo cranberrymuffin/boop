@@ -83,7 +83,6 @@ class BoopBleModule(reactContext: ReactApplicationContext) : ReactContextBaseJav
             val data = AdvertiseData.Builder()
                 .setIncludeDeviceName(false)
                 .setIncludeTxPowerLevel(false)
-                .addServiceUuid(ParcelUuid(BOOP_SERVICE_UUID))
                 .addServiceData(ParcelUuid(BOOP_SERVICE_UUID), userName.toByteArray())
                 .build()
 
