@@ -1,13 +1,15 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
-import type { EmitterSubscription } from 'react-native';
-import NativeBleBoopModule, { type BoopUser } from './NativeBleBoopSpec';
+import { NativeEventEmitter, NativeModules } from "react-native";
+import type { EmitterSubscription } from "react-native";
+import NativeBleBoopModule, { type BoopUser } from "./NativeBleBoopSpec";
 
 export { BoopUser };
 
 export interface BleBoopEvents {
   onUserDiscovered: (user: BoopUser) => void;
   onUserLost: (userId: string) => void;
-  onConnectionStateChanged: (state: 'connected' | 'disconnected' | 'connecting') => void;
+  onConnectionStateChanged: (
+    state: "connected" | "disconnected" | "connecting"
+  ) => void;
   onError: (error: string) => void;
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,39 +7,52 @@ import {
   StyleSheet,
   Alert,
   Switch,
-} from 'react-native';
-import BleBoop, { BoopUser } from 'react-native-ble-boop';
+} from "react-native";
+import BleBoop from "../modules/react-native-ble-boop/src";
+import type { BoopUser } from "../modules/react-native-ble-boop/src";
 
 export default function BleBoopScreen() {
   const [isScanning, setIsScanning] = useState(false);
   const [isAdvertising, setIsAdvertising] = useState(false);
   const [discoveredUsers, setDiscoveredUsers] = useState<BoopUser[]>([]);
-  const [userName] = useState('User');
+  const [userName] = useState("User");
   const [bluetoothEnabled, setBluetoothEnabled] = useState(false);
-  const [connectionState, setConnectionState] = useState<string>('disconnected');
+  const [connectionState, setConnectionState] =
+    useState<string>("disconnected");
 
   useEffect(() => {
     // Check if Bluetooth is enabled
     checkBluetoothStatus();
 
     // Set up event listeners
-    const userDiscoveredListener = BleBoop.addListener('onUserDiscovered', (user: BoopUser) => {
-      setDiscoveredUsers(prev => {
-        const filtered = prev.filter(u => u.id !== user.id);
-        return [...filtered, user].sort((a, b) => (a.distance || 0) - (b.distance || 0));
-      });
-    });
+    const userDiscoveredListener = BleBoop.addListener(
+      "onUserDiscovered",
+      (user: BoopUser) => {
+        setDiscoveredUsers((prev) => {
+          const filtered = prev.filter((u) => u.id !== user.id);
+          return [...filtered, user].sort(
+            (a, b) => (a.distance || 0) - (b.distance || 0)
+          );
+        });
+      }
+    );
 
-    const userLostListener = BleBoop.addListener('onUserLost', (userId: string) => {
-      setDiscoveredUsers(prev => prev.filter(u => u.id !== userId));
-    });
+    const userLostListener = BleBoop.addListener(
+      "onUserLost",
+      (userId: string) => {
+        setDiscoveredUsers((prev) => prev.filter((u) => u.id !== userId));
+      }
+    );
 
-    const connectionListener = BleBoop.addListener('onConnectionStateChanged', (state: string) => {
-      setConnectionState(state);
-    });
+    const connectionListener = BleBoop.addListener(
+      "onConnectionStateChanged",
+      (state: string) => {
+        setConnectionState(state);
+      }
+    );
 
-    const errorListener = BleBoop.addListener('onError', (error: string) => {
-      Alert.alert('BLE Error', error);
+    const errorListener = BleBoop.addListener("onError", (error: string) => {
+      Alert.alert("BLE Error", error);
     });
 
     return () => {
@@ -54,16 +67,16 @@ export default function BleBoopScreen() {
     try {
       const enabled = await BleBoop.isBluetoothEnabled();
       setBluetoothEnabled(enabled);
-      
+
       if (!enabled) {
         Alert.alert(
-          'Bluetooth Disabled',
-          'Please enable Bluetooth to use Boop features',
-          [{ text: 'OK' }]
+          "Bluetooth Disabled",
+          "Please enable Bluetooth to use Boop features",
+          [{ text: "OK" }]
         );
       }
     } catch (error) {
-      console.error('Error checking Bluetooth status:', error);
+      console.error("Error checking Bluetooth status:", error);
     }
   };
 
@@ -72,13 +85,13 @@ export default function BleBoopScreen() {
       const granted = await BleBoop.requestBluetoothPermissions();
       if (!granted) {
         Alert.alert(
-          'Permissions Required',
-          'Bluetooth permissions are required for Boop to work',
-          [{ text: 'OK' }]
+          "Permissions Required",
+          "Bluetooth permissions are required for Boop to work",
+          [{ text: "OK" }]
         );
       }
     } catch (error) {
-      console.error('Error requesting permissions:', error);
+      console.error("Error requesting permissions:", error);
     }
   };
 
@@ -100,8 +113,9 @@ export default function BleBoopScreen() {
         setIsScanning(true);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to toggle scanning';
-      Alert.alert('Error', errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to toggle scanning";
+      Alert.alert("Error", errorMessage);
     }
   };
 
@@ -122,29 +136,34 @@ export default function BleBoopScreen() {
         setIsAdvertising(true);
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to toggle advertising';
-      Alert.alert('Error', errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to toggle advertising";
+      Alert.alert("Error", errorMessage);
     }
   };
 
   const connectToUser = async (user: BoopUser) => {
     try {
       await BleBoop.connectToUser(user.id);
-      Alert.alert('Connecting', `Connecting to ${user.name}...`);
+      Alert.alert("Connecting", `Connecting to ${user.name}...`);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Failed to connect to user';
-      Alert.alert('Connection Error', errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to connect to user";
+      Alert.alert("Connection Error", errorMessage);
     }
   };
 
   const formatDistance = (distance?: number) => {
-    if (!distance) return 'Unknown';
+    if (!distance) return "Unknown";
     if (distance < 1) return `${(distance * 100).toFixed(0)}cm`;
     return `${distance.toFixed(1)}m`;
   };
 
   const renderUser = ({ item }: { item: BoopUser }) => (
-    <TouchableOpacity style={styles.userItem} onPress={() => connectToUser(item)}>
+    <TouchableOpacity
+      style={styles.userItem}
+      onPress={() => connectToUser(item)}
+    >
       <View style={styles.userInfo}>
         <Text style={styles.userName}>{item.name}</Text>
         <Text style={styles.userDetails}>
@@ -160,14 +179,12 @@ export default function BleBoopScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Boop Discovery</Text>
-      
+
       <View style={styles.statusContainer}>
         <Text style={styles.statusText}>
-          Bluetooth: {bluetoothEnabled ? '✅ Enabled' : '❌ Disabled'}
+          Bluetooth: {bluetoothEnabled ? "✅ Enabled" : "❌ Disabled"}
         </Text>
-        <Text style={styles.statusText}>
-          Connection: {connectionState}
-        </Text>
+        <Text style={styles.statusText}>Connection: {connectionState}</Text>
       </View>
 
       <View style={styles.controlsContainer}>
@@ -176,8 +193,8 @@ export default function BleBoopScreen() {
           <Switch
             value={isScanning}
             onValueChange={toggleScanning}
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isScanning ? '#f5dd4b' : '#f4f3f4'}
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isScanning ? "#f5dd4b" : "#f4f3f4"}
           />
         </View>
 
@@ -186,8 +203,8 @@ export default function BleBoopScreen() {
           <Switch
             value={isAdvertising}
             onValueChange={toggleAdvertising}
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isAdvertising ? '#f5dd4b' : '#f4f3f4'}
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={isAdvertising ? "#f5dd4b" : "#f4f3f4"}
           />
         </View>
       </View>
@@ -198,7 +215,7 @@ export default function BleBoopScreen() {
         </Text>
         {discoveredUsers.length === 0 ? (
           <Text style={styles.noUsersText}>
-            {isScanning ? 'Scanning for users...' : 'No users found'}
+            {isScanning ? "Scanning for users..." : "No users found"}
           </Text>
         ) : (
           <FlatList
@@ -217,17 +234,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: "#f5f5f5",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 20,
-    color: '#333',
+    color: "#333",
   },
   statusContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
@@ -235,75 +252,75 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 16,
     marginBottom: 5,
-    color: '#555',
+    color: "#555",
   },
   controlsContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
   },
   control: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 10,
   },
   controlLabel: {
     fontSize: 16,
-    color: '#333',
+    color: "#333",
   },
   usersContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 15,
     borderRadius: 10,
   },
   usersTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
-    color: '#333',
+    color: "#333",
   },
   noUsersText: {
-    textAlign: 'center',
-    color: '#888',
-    fontStyle: 'italic',
+    textAlign: "center",
+    color: "#888",
+    fontStyle: "italic",
     marginTop: 20,
   },
   usersList: {
     flex: 1,
   },
   userItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: 15,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: "#f8f9fa",
     borderRadius: 8,
     marginBottom: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   userInfo: {
     flex: 1,
   },
   userName: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
   },
   userDetails: {
     fontSize: 12,
-    color: '#666',
+    color: "#666",
     marginTop: 4,
   },
   connectButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: "#007AFF",
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 15,
   },
   connectButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
     fontSize: 14,
   },
 });

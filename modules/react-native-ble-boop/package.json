@@ -1,9 +1,16 @@
 {
   "name": "react-native-ble-boop",
   "version": "1.0.0",
+  "files": [
+    "src",
+    "android",
+    "ios",
+    "lib"
+  ],
   "description": "Native BLE Turbo Module for boop discovery",
-  "main": "lib/commonjs/index.js",
-  "types": "lib/typescript/index.d.ts",
+  "main": "src/index.ts",
+  "react-native": "boop/app/index.tsx",
+  "types": "src/index.ts",
   "scripts": {
     "build": "tsc",
     "prepare": "bob build"
@@ -14,8 +21,6 @@
     "bluetooth",
     "turbo-module"
   ],
-  "author": "boop",
-  "license": "MIT",
   "devDependencies": {
     "@react-native/codegen": "^0.74.0",
     "react-native-builder-bob": "^0.23.0",
@@ -40,8 +45,11 @@
     ]
   },
   "codegenConfig": {
-    "name": "RNBleBoopSpec",
+    "name": "BleBoopSpec",
     "type": "modules",
-    "jsSrcsDir": "src"
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.bleboop"
+    }
   }
 }
