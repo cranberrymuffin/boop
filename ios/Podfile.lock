@@ -2328,7 +2328,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  BoopBle: fa86c0127fea020818943e44e84e56670aad9647
+  BoopBle: 8e272245b782fce7e66a41db284a93dc97c39316
   EXConstants: 7e4654405af367ff908c863fe77a8a22d60bd37d
   Expo: 170291b86adbf5fe95d36bc7a90288203cec739e
   ExpoAsset: 84810d6fed8179f04d4a7a4a6b37028bbd726e26

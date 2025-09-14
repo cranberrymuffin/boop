@@ -1,12 +1,24 @@
 #import "BoopBle.h"
+#import "BoopBle-Swift.h"
 
 @implementation BoopBle
+{
+    BoopBleImpl *_impl;
+}
+
 RCT_EXPORT_MODULE()
 
-- (NSNumber *)multiply:(double)a b:(double)b {
-    NSNumber *result = @(a * b);
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _impl = [[BoopBleImpl alloc] init];
+    }
+    return self;
+}
 
-    return result;
+- (NSNumber *)multiply:(double)a b:(double)b {
+    return [_impl multiply:a b:b];
 }
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
