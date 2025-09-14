@@ -73,21 +73,8 @@ class BoopBle: RCTEventEmitter {
         
         self.userName = userName
         
-        // Create the service
-        let service = CBMutableService(type: BOOP_SERVICE_UUID, primary: true)
-        
-        // Create the characteristic with the username
-        let characteristic = CBMutableCharacteristic(
-            type: BOOP_CHARACTERISTIC_UUID,
-            properties: [.read, .notify],
-            value: userName.data(using: .utf8),
-            permissions: [.readable]
-        )
-        
-        service.characteristics = [characteristic]
-        peripheralManager.add(service)
-        
-        // Start advertising
+        // Start advertising with just the service UUID and local name
+        // Don't add services for simple advertising - this can cause crashes
         let advertisementData: [String: Any] = [
             CBAdvertisementDataServiceUUIDsKey: [BOOP_SERVICE_UUID],
             CBAdvertisementDataLocalNameKey: "Boop-\(userName)"

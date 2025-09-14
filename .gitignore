@@ -39,7 +39,8 @@ yarn-error.*
 app-example
 
 # generated build artifacts (but keep the ios/android project folders)
-/ios/build
+/ios/*
+/android/*
 **/android/build
 **/android/generated
 /android/.gradle
