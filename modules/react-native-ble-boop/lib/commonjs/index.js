@@ -1,15 +1,19 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports.default = void 0;
 var _reactNative = require("react-native");
 var _NativeBleBoopSpec = _interopRequireDefault(require("./NativeBleBoopSpec"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : { default: e };
+}
 class BleBoop {
   constructor() {
-    this.eventEmitter = new _reactNative.NativeEventEmitter(_reactNative.NativeModules.BleBoop);
+    this.eventEmitter = new _reactNative.NativeEventEmitter(
+      _reactNative.NativeModules.BleBoop
+    );
   }
 
   /**
@@ -89,5 +93,5 @@ class BleBoop {
     this.eventEmitter.removeAllListeners(eventName);
   }
 }
-var _default = exports.default = new BleBoop();
+var _default = (exports.default = new BleBoop());
 //# sourceMappingURL=index.js.map

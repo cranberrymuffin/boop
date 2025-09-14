@@ -1,5 +1,5 @@
-import { NativeEventEmitter, NativeModules } from 'react-native';
-import NativeBleBoopModule from './NativeBleBoopSpec';
+import { NativeEventEmitter, NativeModules } from "react-native";
+import NativeBleBoopModule from "./NativeBleBoopSpec";
 class BleBoop {
   constructor() {
     this.eventEmitter = new NativeEventEmitter(NativeModules.BleBoop);

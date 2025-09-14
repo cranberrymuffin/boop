@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
+  Alert,
   FlatList,
   StyleSheet,
-  Alert,
   Switch,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import BleBoop from "../modules/react-native-ble-boop/src";
 import type { BoopUser } from "../modules/react-native-ble-boop/src";
+import BleBoop from "../modules/react-native-ble-boop/src";
 
 export default function BleBoopScreen() {
   const [isScanning, setIsScanning] = useState(false);

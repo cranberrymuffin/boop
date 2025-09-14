@@ -1,5 +1,5 @@
-import { NativeEventEmitter, NativeModules } from "react-native";
 import type { EmitterSubscription } from "react-native";
+import { NativeEventEmitter, NativeModules } from "react-native";
 import NativeBleBoopModule, { type BoopUser } from "./NativeBleBoopSpec";
 
 export { BoopUser };

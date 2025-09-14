@@ -1,5 +1,5 @@
-import type { TurboModule } from 'react-native';
-import { TurboModuleRegistry } from 'react-native';
+import type { TurboModule } from "react-native";
+import { TurboModuleRegistry } from "react-native";
 
 export interface BoopUser {
   id: string;
@@ -18,10 +18,10 @@ export interface Spec extends TurboModule {
   getDiscoveredUsers(): Promise<BoopUser[]>;
   isBluetoothEnabled(): Promise<boolean>;
   requestBluetoothPermissions(): Promise<boolean>;
-  
+
   // Event emitter methods for Turbo Modules
   addListener(eventName: string): void;
   removeListeners(count: number): void;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('BleBoop');
+export default TurboModuleRegistry.getEnforcing<Spec>("BleBoop");

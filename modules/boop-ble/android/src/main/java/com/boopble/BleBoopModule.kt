@@ -1,4 +1,4 @@
-package com.bleboop
+package com.boopble
 
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod

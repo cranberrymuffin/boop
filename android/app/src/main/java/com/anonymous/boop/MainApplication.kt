@@ -16,7 +16,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
 
-import com.boopble.BoopBlePackage
+import com.boopble.BleBoopPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -27,7 +27,7 @@ class MainApplication : Application(), ReactApplication {
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
-              add(BoopBlePackage())
+              add(BleBoopPackage())
             }
 
           override fun getJSMainModuleName(): String = ".expo/.virtual-metro-entry"
