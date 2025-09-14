@@ -1,3 +1,7 @@
+import NativeBoopBle from './NativeBoopBle';
+
 export function multiply(a: number, b: number): number {
-  throw new Error("multiply not implemented for web");
+  return NativeBoopBle.multiply(a, b);
 }
+
+export default NativeBoopBle;

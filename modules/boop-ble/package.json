@@ -8,17 +8,13 @@
   },
   "scripts": {
     "codegen": "react-native codegen --platform all",
-    "codegen:android": "react-native codegen --platform android --outputPath android/generated",
-    "codegen:ios": "react-native codegen --platform ios --outputPath ios/generated"
+    "codegen:android": "react-native codegen --platform android",
+    "codegen:ios": "react-native codegen --platform ios"
   },
   "codegenConfig": {
     "name": "BoopBleSpec",
     "type": "modules",
     "jsSrcsDir": "src",
-    "outputDir": {
-      "ios": "ios/generated",
-      "android": "android/generated"
-    },
     "android": {
       "javaPackageName": "com.boopble"
     }

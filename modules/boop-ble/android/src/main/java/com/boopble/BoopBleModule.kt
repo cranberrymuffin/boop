@@ -2,11 +2,10 @@ package com.boopble
 
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.annotations.ReactModule
-import com.facebook.fbreact.specs.NativeBoopBleSpec
 
 @ReactModule(name = BoopBleModule.NAME)
 class BoopBleModule(reactContext: ReactApplicationContext) :
-  NativeBoopBleSpec(reactContext) {
+  com.boopble.NativeBoopBleSpec(reactContext) {
 
   override fun getName(): String {
     return NAME
