@@ -10,6 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "This app uses Bluetooth to discover and connect with nearby Boop users.",
+        "NSBluetoothPeripheralUsageDescription": "This app uses Bluetooth to advertise itself to nearby Boop users."
+      },
       "bundleIdentifier": "com.anonymous.boop"
     },
     "android": {
@@ -21,7 +25,16 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.boop"
+      "permissions": [
+        "android.permission.BLUETOOTH",
+        "android.permission.BLUETOOTH_ADMIN",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.BLUETOOTH_ADVERTISE",
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.BLUETOOTH_SCAN",
+      ],
+      "package": "com.bleboop"
     },
     "web": {
       "output": "static",
