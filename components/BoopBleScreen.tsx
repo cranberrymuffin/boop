@@ -37,6 +37,24 @@ export default function BoopBleScreen() {
       }
     );
 
+    const bluetoothStateListener = BoopBle.addListener(
+      "onBluetoothStateChanged",
+      (state) => {
+        const isBluetoothEnabled = state == "enabled";
+        setBluetoothEnabled(isBluetoothEnabled);
+        if (!isBluetoothEnabled) {
+          setIsScanning(false);
+          setIsAdvertising(false);
+          setDiscoveredUsers([]);
+          Alert.alert(
+            "Bluetooth Disabled",
+            "Please enable Bluetooth to use Boop features",
+            [{ text: "OK" }]
+          );
+        }
+      }
+    );
+
     const userLostListener = BoopBle.addListener(
       "onUserLost",
       (userId: string) => {
@@ -57,6 +75,7 @@ export default function BoopBleScreen() {
 
     return () => {
       userDiscoveredListener.remove();
+      bluetoothStateListener.remove();
       userLostListener.remove();
       connectionListener.remove();
       errorListener.remove();
