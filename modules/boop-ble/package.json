@@ -1,0 +1,37 @@
+{
+  "name": "react-native-boop-ble",
+  "version": "0.0.0",
+  "description": "BLE management",
+  "main": "src/index",
+  "expo": {
+    "plugin": "./plugin/build/index.js"
+  },
+  "scripts": {
+    "codegen": "react-native codegen --platform all",
+    "codegen:android": "react-native codegen --platform android",
+    "codegen:ios": "react-native codegen --platform ios"
+  },
+  "codegenConfig": {
+    "name": "BoopBleSpec",
+    "type": "modules",
+    "jsSrcsDir": "src",
+    "android": {
+      "javaPackageName": "com.boopble"
+    }
+  },
+  "author": " <> ()",
+  "license": "UNLICENSED",
+  "homepage": "#readme",
+  "devDependencies": {
+    "@react-native-community/cli": "^20.0.2",
+    "@react-native/babel-preset": "0.81.1",
+    "@types/react": "^19.1.0",
+    "react": "19.1.0",
+    "react-native": "0.81.1"
+  },
+  "create-react-native-library": {
+    "languages": "kotlin-objc",
+    "type": "turbo-module",
+    "version": "0.54.3"
+  }
+}
