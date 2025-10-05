@@ -32,7 +32,7 @@ class BoopBle: RCTEventEmitter {
     }
     
     override func supportedEvents() -> [String]! {
-        return ["onUserDiscovered", "onUserLost", "onConnectionStateChanged", "onError"]
+        return ["onBluetoothStateChanged", "onUserDiscovered", "onUserLost", "onConnectionStateChanged", "onError"]
     }
     
     override func startObserving() {
@@ -195,15 +195,15 @@ extension BoopBle: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            print("Bluetooth is powered on")
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "enabled")
         case .poweredOff:
-            sendEventSafely(withName: "onError", body: ["error": "Bluetooth is powered off"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         case .unauthorized:
-            sendEventSafely(withName: "onError", body: ["error": "Bluetooth access unauthorized"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         case .unsupported:
-            sendEventSafely(withName: "onError", body: ["error": "Bluetooth not supported"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         default:
-            sendEventSafely(withName: "onError", body: ["error": "Unknown Bluetooth state"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         }
     }
     
@@ -241,15 +241,15 @@ extension BoopBle: CBPeripheralManagerDelegate {
     func peripheralManagerDidUpdateState(_ peripheral: CBPeripheralManager) {
         switch peripheral.state {
         case .poweredOn:
-            print("Peripheral manager is powered on")
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "enabled")
         case .poweredOff:
-            sendEventSafely(withName: "onError", body: ["error": "Bluetooth is powered off"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         case .unauthorized:
-            sendEventSafely(withName: "onError", body: ["error": "Bluetooth access unauthorized"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         case .unsupported:
-            sendEventSafely(withName: "onError", body: ["error": "Bluetooth not supported"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         default:
-            sendEventSafely(withName: "onError", body: ["error": "Unknown Bluetooth state"])
+            sendEventSafely(withName: "onBluetoothStateChanged", body: "disabled")
         }
     }
     
