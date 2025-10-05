@@ -5,6 +5,7 @@ import NativeBoopBle, { type BoopUser } from "./NativeBoopBle";
 export { BoopUser };
 
 export interface BoopBleEvents {
+  onBluetoothStateChanged: (state: "enabled" | "disabled") => void;
   onUserDiscovered: (user: BoopUser) => void;
   onUserLost: (userId: string) => void;
   onConnectionStateChanged: (
