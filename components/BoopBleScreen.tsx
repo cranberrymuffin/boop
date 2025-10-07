@@ -14,15 +14,29 @@ import BoopBle from "../modules/boop-ble/src";
 export default function BoopBleScreen() {
   const [isScanning, setIsScanning] = useState(false);
   const [isAdvertising, setIsAdvertising] = useState(false);
+  const [isBooping, setIsBooping] = useState(false);
   const [discoveredUsers, setDiscoveredUsers] = useState<BoopUser[]>([]);
   const [userName] = useState("User");
   const [bluetoothEnabled, setBluetoothEnabled] = useState(false);
   const [connectionState, setConnectionState] =
     useState<string>("disconnected");
 
+  // Store event listeners to clean them up later
+  const [eventListeners, setEventListeners] = useState<any[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+
   useEffect(() => {
+    // Only cleanup when component unmounts
+    return () => {
+      eventListeners.forEach((listener) => listener?.remove());
+    };
+  }, [eventListeners]);
+
+  const initializeBluetooth = async () => {
+    if (isInitialized) return;
+
     // Check if Bluetooth is enabled
-    checkBluetoothStatus();
+    await checkBluetoothStatus();
 
     // Set up event listeners
     const userDiscoveredListener = BoopBle.addListener(
@@ -40,11 +54,12 @@ export default function BoopBleScreen() {
     const bluetoothStateListener = BoopBle.addListener(
       "onBluetoothStateChanged",
       (state) => {
-        const isBluetoothEnabled = state == "enabled";
+        const isBluetoothEnabled = state === "enabled";
         setBluetoothEnabled(isBluetoothEnabled);
         if (!isBluetoothEnabled) {
           setIsScanning(false);
           setIsAdvertising(false);
+          setIsBooping(false);
           setDiscoveredUsers([]);
           Alert.alert(
             "Bluetooth Disabled",
@@ -73,14 +88,16 @@ export default function BoopBleScreen() {
       Alert.alert("BLE Error", error);
     });
 
-    return () => {
-      userDiscoveredListener.remove();
-      bluetoothStateListener.remove();
-      userLostListener.remove();
-      connectionListener.remove();
-      errorListener.remove();
-    };
-  }, []);
+    setEventListeners([
+      userDiscoveredListener,
+      bluetoothStateListener,
+      userLostListener,
+      connectionListener,
+      errorListener,
+    ]);
+
+    setIsInitialized(true);
+  };
 
   const checkBluetoothStatus = async () => {
     try {
@@ -114,8 +131,11 @@ export default function BoopBleScreen() {
     }
   };
 
-  const toggleScanning = async () => {
+  const toggleBoop = async () => {
     try {
+      // Initialize Bluetooth setup on first toggle
+      await initializeBluetooth();
+
       if (!bluetoothEnabled) {
         await checkBluetoothStatus();
         return;
@@ -123,40 +143,29 @@ export default function BoopBleScreen() {
 
       await requestPermissions();
 
-      if (isScanning) {
-        await BoopBle.stopScanning();
-        setIsScanning(false);
+      if (isBooping) {
+        // Stop both scanning and advertising
+        if (isScanning) {
+          await BoopBle.stopScanning();
+          setIsScanning(false);
+        }
+        if (isAdvertising) {
+          await BoopBle.stopAdvertising();
+          setIsAdvertising(false);
+        }
         setDiscoveredUsers([]);
+        setIsBooping(false);
       } else {
+        // Start both scanning and advertising
         await BoopBle.startScanning();
         setIsScanning(true);
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to toggle scanning";
-      Alert.alert("Error", errorMessage);
-    }
-  };
-
-  const toggleAdvertising = async () => {
-    try {
-      if (!bluetoothEnabled) {
-        await checkBluetoothStatus();
-        return;
-      }
-
-      await requestPermissions();
-
-      if (isAdvertising) {
-        await BoopBle.stopAdvertising();
-        setIsAdvertising(false);
-      } else {
         await BoopBle.startAdvertising(userName);
         setIsAdvertising(true);
+        setIsBooping(true);
       }
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to toggle advertising";
+        error instanceof Error ? error.message : "Failed to toggle Boop mode";
       Alert.alert("Error", errorMessage);
     }
   };
@@ -208,24 +217,19 @@ export default function BoopBleScreen() {
 
       <View style={styles.controlsContainer}>
         <View style={styles.control}>
-          <Text style={styles.controlLabel}>Scan for Users</Text>
+          <Text style={styles.controlLabel}>Enable Boop Mode</Text>
           <Switch
-            value={isScanning}
-            onValueChange={toggleScanning}
+            value={isBooping}
+            onValueChange={toggleBoop}
             trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isScanning ? "#f5dd4b" : "#f4f3f4"}
+            thumbColor={isBooping ? "#f5dd4b" : "#f4f3f4"}
           />
         </View>
-
-        <View style={styles.control}>
-          <Text style={styles.controlLabel}>Advertise as {userName}</Text>
-          <Switch
-            value={isAdvertising}
-            onValueChange={toggleAdvertising}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={isAdvertising ? "#f5dd4b" : "#f4f3f4"}
-          />
-        </View>
+        <Text style={styles.boopDescription}>
+          {isBooping
+            ? "🔍 Scanning for users and 📡 advertising as " + userName
+            : "Toggle to start scanning and advertising"}
+        </Text>
       </View>
 
       <View style={styles.usersContainer}>
@@ -288,6 +292,13 @@ const styles = StyleSheet.create({
   controlLabel: {
     fontSize: 16,
     color: "#333",
+  },
+  boopDescription: {
+    fontSize: 14,
+    color: "#666",
+    fontStyle: "italic",
+    marginTop: 10,
+    textAlign: "center",
   },
   usersContainer: {
     flex: 1,

@@ -25,10 +25,8 @@ class BoopBle: RCTEventEmitter {
     
     override init() {
         super.init()
-        // Delay Bluetooth initialization until the module is properly set up
-        DispatchQueue.main.async {
-            self.initializeBluetooth()
-        }
+        // Do NOT initialize bluetooth managers here to avoid triggering permission prompt
+        // They will be lazily created on first use via ensureBluetoothManagers()
     }
     
     override func supportedEvents() -> [String]! {
@@ -53,9 +51,16 @@ class BoopBle: RCTEventEmitter {
         centralManager = CBCentralManager(delegate: self, queue: nil)
         peripheralManager = CBPeripheralManager(delegate: self, queue: nil)
     }
+
+    private func ensureBluetoothManagers() {
+        if centralManager == nil || peripheralManager == nil {
+            initializeBluetooth()
+        }
+    }
     
     @objc
     func startAdvertising(_ userName: String, resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        ensureBluetoothManagers()
         guard let peripheralManager = peripheralManager else {
             reject("BLUETOOTH_ERROR", "Peripheral manager not initialized", nil)
             return
@@ -94,6 +99,7 @@ class BoopBle: RCTEventEmitter {
     
     @objc
     func startScanning(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        ensureBluetoothManagers()
         guard let centralManager = centralManager else {
             reject("BLUETOOTH_ERROR", "Central manager not initialized", nil)
             return
@@ -160,13 +166,15 @@ class BoopBle: RCTEventEmitter {
     
     @objc
     func isBluetoothEnabled(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
+        ensureBluetoothManagers()
         let isEnabled = centralManager?.state == .poweredOn
         resolve(isEnabled)
     }
     
     @objc
     func requestBluetoothPermissions(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        // iOS automatically handles Bluetooth permissions
+        // iOS automatically handles Bluetooth permissions. Force lazy init ONLY if caller wants to preflight.
+        // Do not call ensureBluetoothManagers() here to avoid premature prompt unless explicitly desired.
         resolve(true)
     }
     
